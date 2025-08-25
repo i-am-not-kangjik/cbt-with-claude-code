@@ -11,10 +11,31 @@ export default function Home() {
         
         <div className="space-y-4">
           <Link 
-            href="/quiz"
+            href="/quiz?count=10"
+            className="block w-full py-4 px-6 bg-green-600 text-white rounded-xl font-semibold hover:bg-green-700 transition-colors"
+          >
+            10문제 풀기
+          </Link>
+          
+          <Link 
+            href="/quiz?count=30"
             className="block w-full py-4 px-6 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
           >
-            시작하기
+            30문제 풀기
+          </Link>
+          
+          <Link 
+            href="/quiz?count=50"
+            className="block w-full py-4 px-6 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition-colors"
+          >
+            50문제 풀기
+          </Link>
+          
+          <Link 
+            href="/quiz?count=100"
+            className="block w-full py-4 px-6 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 transition-colors"
+          >
+            100문제 풀기
           </Link>
           
           <Link 

@@ -19,6 +19,7 @@ const PART_OF_SPEECH_KOREAN: Record<string, string> = {
 export default function Quiz() {
   const searchParams = useSearchParams()
   const router = useRouter()
+  const questionCount = parseInt(searchParams.get('count') || '10')
   
   const [questions, setQuestions] = useState<QuizQuestion[]>([])
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -29,21 +30,26 @@ export default function Quiz() {
 
   useEffect(() => {
     loadQuestions()
-  }, [])
+  }, [questionCount])
 
   const loadQuestions = async () => {
     try {
       setIsLoading(true)
+      // Get random words by ordering randomly
       const { data: words, error } = await supabase
         .from('words')
         .select('*')
-        .limit(10)
-
+        .order('created_at', { ascending: false })
+        .limit(100)
+      
       if (error) throw error
 
-      if (words && words.length > 0) {
+      // Shuffle and take the requested number of questions
+      const shuffledWords = words?.sort(() => Math.random() - 0.5).slice(0, questionCount) || []
+
+      if (shuffledWords && shuffledWords.length > 0) {
         const quizQuestions = await Promise.all(
-          words.map(async (word) => {
+          shuffledWords.map(async (word) => {
             const wrongAnswers = await getWrongAnswers(word)
             const options = [...wrongAnswers, word.korean].sort(() => Math.random() - 0.5)
             
