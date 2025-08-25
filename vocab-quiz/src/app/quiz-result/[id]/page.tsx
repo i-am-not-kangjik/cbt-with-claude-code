@@ -29,10 +29,6 @@ export default function QuizResultDetail({ params }: Props) {
   const [answers, setAnswers] = useState<QuizAnswer[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    loadQuizResult()
-  }, [id])
-
   const loadQuizResult = async () => {
     try {
       setIsLoading(true)
@@ -66,6 +62,10 @@ export default function QuizResultDetail({ params }: Props) {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    loadQuizResult()
+  }, [id])
 
   if (isLoading) {
     return (

@@ -27,16 +27,17 @@ export default function PracticeQuiz() {
   const [score, setScore] = useState(0)
   const [showResult, setShowResult] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [userAnswers, setUserAnswers] = useState<Array<{word: any, userAnswer: string, isCorrect: boolean}>>([])
+  const [userAnswers, setUserAnswers] = useState<Array<{word: Word, userAnswer: string, isCorrect: boolean}>>([])
 
   useEffect(() => {
+    const wordIdsString = wordIds.join(',')
     if (wordIds.length > 0) {
       loadPracticeQuestions()
     } else {
       setIsLoading(false)
       router.push('/')
     }
-  }, [wordIds.join(',')])
+  }, [wordIds.join(','), router])
 
   const loadPracticeQuestions = async () => {
     try {
@@ -98,7 +99,7 @@ export default function PracticeQuiz() {
 
       const shuffled = words.sort(() => Math.random() - 0.5)
       return shuffled.slice(0, 3).map(w => w.korean)
-    } catch (error) {
+    } catch {
       return ['오답1', '오답2', '오답3']
     }
   }
@@ -130,7 +131,7 @@ export default function PracticeQuiz() {
     }
   }
 
-  const savePracticeResult = async (finalScore: number, answers: Array<{word: any, userAnswer: string, isCorrect: boolean}>) => {
+  const savePracticeResult = async (finalScore: number, answers: Array<{word: Word, userAnswer: string, isCorrect: boolean}>) => {
     try {
       // Save quiz result
       const { data: quizResult, error: quizError } = await supabase
@@ -171,7 +172,7 @@ export default function PracticeQuiz() {
     }
   }
 
-  const updateWordStats = async (answers: Array<{word: any, userAnswer: string, isCorrect: boolean}>) => {
+  const updateWordStats = async (answers: Array<{word: Word, userAnswer: string, isCorrect: boolean}>) => {
     try {
       for (const answer of answers) {
         // Get existing stats or create new

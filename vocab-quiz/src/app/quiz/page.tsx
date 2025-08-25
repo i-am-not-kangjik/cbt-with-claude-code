@@ -27,16 +27,13 @@ export default function Quiz() {
   const [score, setScore] = useState(0)
   const [showResult, setShowResult] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [userAnswers, setUserAnswers] = useState<Array<{word: any, userAnswer: string, isCorrect: boolean}>>([])
-  const [quizResultId, setQuizResultId] = useState<string>('')
-
-  useEffect(() => {
-    loadQuestions()
-  }, [questionCount])
+  const [userAnswers, setUserAnswers] = useState<Array<{word: Word, userAnswer: string, isCorrect: boolean}>>([])
+  const [, setQuizResultId] = useState<string>('')
 
   const loadQuestions = async () => {
     try {
       setIsLoading(true)
+      
       // Get random words by ordering randomly
       const { data: words, error } = await supabase
         .from('words')
@@ -70,6 +67,11 @@ export default function Quiz() {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    loadQuestions()
+  }, [questionCount])
+
 
   const getWrongAnswers = async (currentWord: Word): Promise<string[]> => {
     const { data: words, error } = await supabase
@@ -112,7 +114,7 @@ export default function Quiz() {
     }
   }
 
-  const saveQuizResult = async (finalScore: number, answers: Array<{word: any, userAnswer: string, isCorrect: boolean}>) => {
+  const saveQuizResult = async (finalScore: number, answers: Array<{word: Word, userAnswer: string, isCorrect: boolean}>) => {
     try {
       // Save quiz result
       const { data: quizResult, error: quizError } = await supabase
@@ -155,7 +157,7 @@ export default function Quiz() {
     }
   }
 
-  const updateWordStats = async (answers: Array<{word: any, userAnswer: string, isCorrect: boolean}>) => {
+  const updateWordStats = async (answers: Array<{word: Word, userAnswer: string, isCorrect: boolean}>) => {
     try {
       for (const answer of answers) {
         // Get existing stats or create new
