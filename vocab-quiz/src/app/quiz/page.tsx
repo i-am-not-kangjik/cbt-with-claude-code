@@ -27,6 +27,8 @@ export default function Quiz() {
   const [score, setScore] = useState(0)
   const [showResult, setShowResult] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [userAnswers, setUserAnswers] = useState<Array<{word: any, userAnswer: string, isCorrect: boolean}>>([])
+  const [quizResultId, setQuizResultId] = useState<string>('')
 
   useEffect(() => {
     loadQuestions()
@@ -87,9 +89,16 @@ export default function Quiz() {
   }
 
   const handleNextQuestion = async () => {
-    const newScore = selectedAnswer === questions[currentQuestion].correctAnswer 
-      ? score + 1 
-      : score
+    const isCorrect = selectedAnswer === questions[currentQuestion].correctAnswer
+    const newScore = isCorrect ? score + 1 : score
+    
+    // Record the user's answer
+    const answerRecord = {
+      word: questions[currentQuestion].word,
+      userAnswer: selectedAnswer,
+      isCorrect: isCorrect
+    }
+    setUserAnswers(prev => [...prev, answerRecord])
     
     setScore(newScore)
 
@@ -97,22 +106,108 @@ export default function Quiz() {
       setCurrentQuestion(currentQuestion + 1)
       setSelectedAnswer('')
     } else {
-      await saveQuizResult(newScore)
+      const resultId = await saveQuizResult(newScore, [...userAnswers, answerRecord])
+      setQuizResultId(resultId)
       setShowResult(true)
     }
   }
 
-  const saveQuizResult = async (finalScore: number) => {
+  const saveQuizResult = async (finalScore: number, answers: Array<{word: any, userAnswer: string, isCorrect: boolean}>) => {
     try {
-      await supabase
+      // Save quiz result
+      const { data: quizResult, error: quizError } = await supabase
         .from('quiz_results')
         .insert({
           score: finalScore,
           total_questions: questions.length,
           completed_at: new Date().toISOString()
         })
+        .select()
+        .single()
+
+      if (quizError) throw quizError
+
+      const resultId = quizResult.id
+
+      // Save individual answers
+      const answersToInsert = answers.map(answer => ({
+        quiz_result_id: resultId,
+        word_id: answer.word.id,
+        user_answer: answer.userAnswer,
+        correct_answer: answer.word.korean,
+        is_correct: answer.isCorrect,
+        answered_at: new Date().toISOString()
+      }))
+
+      const { error: answersError } = await supabase
+        .from('quiz_answers')
+        .insert(answersToInsert)
+
+      if (answersError) throw answersError
+
+      // Update word statistics
+      await updateWordStats(answers)
+
+      return resultId
     } catch (error) {
       console.error('Error saving quiz result:', error)
+      return null
+    }
+  }
+
+  const updateWordStats = async (answers: Array<{word: any, userAnswer: string, isCorrect: boolean}>) => {
+    try {
+      for (const answer of answers) {
+        // Get existing stats or create new
+        const { data: existingStats, error: selectError } = await supabase
+          .from('word_stats')
+          .select('*')
+          .eq('word_id', answer.word.id)
+          .maybeSingle()
+
+        if (selectError && selectError.code !== 'PGRST116') {
+          console.error('Error fetching word stats:', selectError)
+          continue
+        }
+
+        if (existingStats) {
+          // Update existing stats
+          const newTotal = existingStats.total_attempts + 1
+          const newCorrect = existingStats.correct_attempts + (answer.isCorrect ? 1 : 0)
+          const newAccuracy = (newCorrect / newTotal) * 100
+
+          const { error: updateError } = await supabase
+            .from('word_stats')
+            .update({
+              total_attempts: newTotal,
+              correct_attempts: newCorrect,
+              accuracy_rate: newAccuracy,
+              last_updated: new Date().toISOString()
+            })
+            .eq('word_id', answer.word.id)
+
+          if (updateError) {
+            console.error('Error updating word stats:', updateError)
+          }
+        } else {
+          // Create new stats
+          const { error: insertError } = await supabase
+            .from('word_stats')
+            .insert({
+              word_id: answer.word.id,
+              total_attempts: 1,
+              correct_attempts: answer.isCorrect ? 1 : 0,
+              accuracy_rate: answer.isCorrect ? 100 : 0,
+              last_updated: new Date().toISOString()
+            })
+
+          if (insertError) {
+            console.error('Error inserting word stats:', insertError)
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error updating word stats:', error)
     }
   }
 
@@ -121,6 +216,8 @@ export default function Quiz() {
     setSelectedAnswer('')
     setScore(0)
     setShowResult(false)
+    setUserAnswers([])
+    setQuizResultId('')
     loadQuestions()
   }
 

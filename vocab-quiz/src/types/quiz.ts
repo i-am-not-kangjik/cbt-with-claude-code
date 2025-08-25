@@ -21,3 +21,24 @@ export interface QuizResult {
   total_questions: number
   completed_at: string
 }
+
+export interface QuizAnswer {
+  id?: string
+  quiz_result_id: string
+  word_id: string
+  user_answer: string
+  correct_answer: string
+  is_correct: boolean
+  answered_at?: string
+  word?: Word
+}
+
+export interface WordStats {
+  id?: string
+  word_id: string
+  total_attempts: number
+  correct_attempts: number
+  accuracy_rate: number
+  last_updated?: string
+  word?: Word
+}

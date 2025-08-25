@@ -28,6 +28,27 @@ CREATE TABLE quiz_results (
   completed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Create quiz_answers table for tracking individual answers
+CREATE TABLE quiz_answers (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  quiz_result_id UUID REFERENCES quiz_results(id) ON DELETE CASCADE,
+  word_id UUID REFERENCES words(id) ON DELETE CASCADE,
+  user_answer TEXT NOT NULL,
+  correct_answer TEXT NOT NULL,
+  is_correct BOOLEAN NOT NULL,
+  answered_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create word_stats table for tracking word performance
+CREATE TABLE word_stats (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  word_id UUID REFERENCES words(id) ON DELETE CASCADE UNIQUE,
+  total_attempts INTEGER DEFAULT 0,
+  correct_attempts INTEGER DEFAULT 0,
+  accuracy_rate DECIMAL(5,2) DEFAULT 0.00,
+  last_updated TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Insert sample vocabulary data (100 words)
 INSERT INTO words (english, korean, part_of_speech) VALUES
 -- Nouns (30 words)
@@ -141,3 +162,17 @@ INSERT INTO words (english, korean, part_of_speech) VALUES
 -- Create indexes for better performance
 CREATE INDEX idx_words_part_of_speech ON words(part_of_speech);
 CREATE INDEX idx_quiz_results_completed_at ON quiz_results(completed_at);
+CREATE INDEX idx_quiz_answers_quiz_result_id ON quiz_answers(quiz_result_id);
+CREATE INDEX idx_quiz_answers_word_id ON quiz_answers(word_id);
+CREATE INDEX idx_word_stats_word_id ON word_stats(word_id);
+CREATE INDEX idx_word_stats_accuracy_rate ON word_stats(accuracy_rate);
+
+-- 모든 사용자에게 접근 권한 부여
+GRANT ALL ON word_stats TO anon;
+GRANT ALL ON quiz_answers TO anon;
+
+-- 또는 RLS 정책 생성
+CREATE POLICY "Allow all operations" ON word_stats FOR ALL USING
+(true);
+CREATE POLICY "Allow all operations" ON quiz_answers FOR ALL USING
+(true);

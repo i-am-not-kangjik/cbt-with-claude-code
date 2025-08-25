@@ -83,11 +83,12 @@ export default function Results() {
                 })
 
                 return (
-                  <div
+                  <button
                     key={result.id || index}
-                    className="bg-gray-700 rounded-xl p-4 flex justify-between items-center border border-gray-600"
+                    onClick={() => router.push(`/quiz-result/${result.id}`)}
+                    className="w-full bg-gray-700 rounded-xl p-4 flex justify-between items-center border border-gray-600 hover:bg-gray-600 transition-colors"
                   >
-                    <div className="flex-1">
+                    <div className="flex-1 text-left">
                       <div className="flex items-center gap-3 mb-2">
                         <span className="text-sm text-gray-400">
                           {date} {time}
@@ -102,7 +103,7 @@ export default function Results() {
                         {percentage}%
                       </div>
                     </div>
-                  </div>
+                  </button>
                 )
               })}
             </div>

@@ -44,6 +44,13 @@ export default function Home() {
           >
             결과 보기
           </Link>
+          
+          <Link 
+            href="/missed-words"
+            className="block w-full py-3 px-6 bg-red-700 text-gray-200 rounded-xl font-medium hover:bg-red-600 transition-colors"
+          >
+            많이 틀린 단어 보기
+          </Link>
         </div>
         
         <div className="mt-8 text-sm text-gray-400">
