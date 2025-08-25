@@ -52,6 +52,7 @@ function PracticeQuizContent() {
       const { data: words, error } = await supabase
         .from('words')
         .select('*')
+        .eq('is_active', true)
         .in('id', wordIds)
 
       if (error) throw error
@@ -90,6 +91,7 @@ function PracticeQuizContent() {
       const { data: words, error } = await supabase
         .from('words')
         .select('korean')
+        .eq('is_active', true)
         .neq('id', currentWord.id)
         .limit(20)
 

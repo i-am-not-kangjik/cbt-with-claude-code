@@ -38,6 +38,7 @@ function QuizContent() {
       const { data: words, error } = await supabase
         .from('words')
         .select('*')
+        .eq('is_active', true)
         .order('created_at', { ascending: false })
         .limit(100)
       
@@ -77,6 +78,7 @@ function QuizContent() {
     const { data: words, error } = await supabase
       .from('words')
       .select('korean')
+      .eq('is_active', true)
       .neq('id', currentWord.id)
       .limit(20)
 

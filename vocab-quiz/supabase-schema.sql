@@ -16,6 +16,7 @@ CREATE TABLE words (
   english TEXT NOT NULL UNIQUE,
   korean TEXT NOT NULL,
   part_of_speech part_of_speech_enum NOT NULL,
+  is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
