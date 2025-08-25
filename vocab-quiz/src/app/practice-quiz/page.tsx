@@ -331,7 +331,7 @@ export default function PracticeQuiz() {
               onClick={() => handleAnswerSelect(option)}
               className={`w-full py-4 px-6 rounded-xl font-medium transition-colors ${
                 selectedAnswer === option
-                  ? 'bg-red-600 text-white'
+                  ? 'bg-blue-600 text-white'
                   : 'bg-gray-700 text-gray-200 hover:bg-gray-600 border border-gray-600'
               }`}
             >
