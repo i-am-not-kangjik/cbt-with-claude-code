@@ -5,12 +5,6 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { QuizResult } from '@/types/quiz'
 
-const DIFFICULTY_KOREAN: Record<string, string> = {
-  easy: '초급',
-  medium: '중급',
-  hard: '고급',
-  mixed: '종합'
-}
 
 export default function Results() {
   const router = useRouter()
@@ -95,9 +89,6 @@ export default function Results() {
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                          {DIFFICULTY_KOREAN[result.difficulty]}
-                        </span>
                         <span className="text-sm text-gray-500">
                           {date} {time}
                         </span>

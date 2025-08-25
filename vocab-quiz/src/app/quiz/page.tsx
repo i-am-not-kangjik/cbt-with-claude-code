@@ -103,7 +103,6 @@ export default function Quiz() {
         .insert({
           score: finalScore,
           total_questions: questions.length,
-          difficulty: 'mixed',
           completed_at: new Date().toISOString()
         })
     } catch (error) {

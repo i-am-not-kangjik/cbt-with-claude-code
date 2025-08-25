@@ -5,7 +5,6 @@ export interface Word {
   english: string
   korean: string
   part_of_speech: PartOfSpeech
-  difficulty: 'easy' | 'medium' | 'hard'
   created_at?: string
 }
 
@@ -20,6 +19,5 @@ export interface QuizResult {
   user_id?: string
   score: number
   total_questions: number
-  difficulty: 'easy' | 'medium' | 'hard' | 'mixed'
   completed_at: string
 }
