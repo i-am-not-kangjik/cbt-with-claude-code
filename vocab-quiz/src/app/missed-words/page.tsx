@@ -54,7 +54,7 @@ export default function MissedWords() {
   const createPracticeQuiz = async () => {
     if (wordStats.length === 0) return
 
-    const wordIds = wordStats.map(stat => stat.word_id)
+    const wordIds = wordStats.slice(0, 10).map(stat => stat.word_id) // 상위 10개만
     // Navigate to a practice quiz with these specific words
     router.push(`/practice-quiz?words=${wordIds.join(',')}`)
   }

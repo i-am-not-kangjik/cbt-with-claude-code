@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, use } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { QuizResult, QuizAnswer } from '@/types/quiz'
@@ -17,20 +17,21 @@ const PART_OF_SPEECH_KOREAN: Record<string, string> = {
 }
 
 interface Props {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export default function QuizResultDetail({ params }: Props) {
   const router = useRouter()
+  const { id } = use(params)
   const [quizResult, setQuizResult] = useState<QuizResult | null>(null)
   const [answers, setAnswers] = useState<QuizAnswer[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     loadQuizResult()
-  }, [params.id])
+  }, [id])
 
   const loadQuizResult = async () => {
     try {
@@ -40,7 +41,7 @@ export default function QuizResultDetail({ params }: Props) {
       const { data: resultData, error: resultError } = await supabase
         .from('quiz_results')
         .select('*')
-        .eq('id', params.id)
+        .eq('id', id)
         .single()
 
       if (resultError) throw resultError
@@ -53,7 +54,7 @@ export default function QuizResultDetail({ params }: Props) {
           *,
           word:words(*)
         `)
-        .eq('quiz_result_id', params.id)
+        .eq('quiz_result_id', id)
         .order('answered_at')
 
       if (answersError) throw answersError
