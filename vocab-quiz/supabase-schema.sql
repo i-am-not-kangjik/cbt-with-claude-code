@@ -13,7 +13,7 @@ CREATE TYPE part_of_speech_enum AS ENUM (
 -- Create words table
 CREATE TABLE words (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  english TEXT NOT NULL,
+  english TEXT NOT NULL UNIQUE,
   korean TEXT NOT NULL,
   part_of_speech part_of_speech_enum NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
