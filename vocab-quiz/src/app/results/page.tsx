@@ -35,28 +35,28 @@ export default function Results() {
   }
 
   const getScoreColor = (percentage: number) => {
-    if (percentage >= 80) return 'text-green-600'
-    if (percentage >= 60) return 'text-yellow-600'
-    return 'text-red-600'
+    if (percentage >= 80) return 'text-green-400'
+    if (percentage >= 60) return 'text-yellow-400'
+    return 'text-red-400'
   }
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="text-xl">로딩 중...</div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+        <div className="text-xl text-white">로딩 중...</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 p-4">
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl p-6 mb-4">
+        <div className="bg-gray-800 rounded-2xl shadow-xl p-6 mb-4 border border-gray-700">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold text-gray-800">퀴즈 결과</h1>
+            <h1 className="text-2xl font-bold text-white">퀴즈 결과</h1>
             <button
               onClick={() => router.push('/')}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               홈으로
             </button>
@@ -64,10 +64,10 @@ export default function Results() {
 
           {results.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-gray-600">아직 퀴즈 결과가 없습니다.</p>
+              <p className="text-gray-300">아직 퀴즈 결과가 없습니다.</p>
               <button
                 onClick={() => router.push('/')}
-                className="mt-4 px-6 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-colors"
+                className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
               >
                 퀴즈 시작하기
               </button>
@@ -85,15 +85,15 @@ export default function Results() {
                 return (
                   <div
                     key={result.id || index}
-                    className="bg-gray-50 rounded-xl p-4 flex justify-between items-center"
+                    className="bg-gray-700 rounded-xl p-4 flex justify-between items-center border border-gray-600"
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm text-gray-400">
                           {date} {time}
                         </span>
                       </div>
-                      <div className="text-sm text-gray-600">
+                      <div className="text-sm text-gray-300">
                         {result.total_questions}문제 중 {result.score}문제 정답
                       </div>
                     </div>
@@ -109,16 +109,16 @@ export default function Results() {
           )}
 
           {results.length > 0 && (
-            <div className="mt-8 p-4 bg-blue-50 rounded-xl">
-              <h3 className="font-semibold text-gray-800 mb-2">통계</h3>
+            <div className="mt-8 p-4 bg-gray-700 rounded-xl border border-gray-600">
+              <h3 className="font-semibold text-white mb-2">통계</h3>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <span className="text-gray-600">총 퀴즈 횟수:</span>
-                  <span className="ml-2 font-semibold">{results.length}회</span>
+                  <span className="text-gray-300">총 퀴즈 횟수:</span>
+                  <span className="ml-2 font-semibold text-white">{results.length}회</span>
                 </div>
                 <div>
-                  <span className="text-gray-600">평균 점수:</span>
-                  <span className="ml-2 font-semibold">
+                  <span className="text-gray-300">평균 점수:</span>
+                  <span className="ml-2 font-semibold text-white">
                     {Math.round(
                       results.reduce((sum, r) => sum + (r.score / r.total_questions) * 100, 0) / results.length
                     )}%

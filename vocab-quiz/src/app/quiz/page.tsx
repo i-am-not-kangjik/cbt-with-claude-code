@@ -120,8 +120,8 @@ export default function Quiz() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="text-xl">로딩 중...</div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+        <div className="text-xl text-white">로딩 중...</div>
       </div>
     )
   }
@@ -130,23 +130,23 @@ export default function Quiz() {
     const percentage = Math.round((score / questions.length) * 100)
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">퀴즈 완료!</h2>
-          <div className="text-6xl font-bold text-blue-500 mb-2">{percentage}%</div>
-          <p className="text-gray-600 mb-6">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col items-center justify-center p-4">
+        <div className="max-w-md w-full bg-gray-800 rounded-2xl shadow-xl p-8 text-center border border-gray-700">
+          <h2 className="text-2xl font-bold text-white mb-4">퀴즈 완료!</h2>
+          <div className="text-6xl font-bold text-blue-400 mb-2">{percentage}%</div>
+          <p className="text-gray-300 mb-6">
             {questions.length}문제 중 {score}문제 맞춤
           </p>
           <div className="space-y-3">
             <button
               onClick={restartQuiz}
-              className="w-full py-3 px-6 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600 transition-colors"
+              className="w-full py-3 px-6 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
             >
               다시 도전
             </button>
             <button
               onClick={() => router.push('/')}
-              className="w-full py-3 px-6 bg-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-300 transition-colors"
+              className="w-full py-3 px-6 bg-gray-700 text-gray-200 rounded-xl font-medium hover:bg-gray-600 transition-colors"
             >
               홈으로
             </button>
@@ -158,8 +158,8 @@ export default function Quiz() {
 
   if (questions.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="text-xl">문제를 불러올 수 없습니다.</div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+        <div className="text-xl text-white">문제를 불러올 수 없습니다.</div>
       </div>
     )
   }
@@ -167,25 +167,25 @@ export default function Quiz() {
   const question = questions[currentQuestion]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col items-center justify-center p-4">
+      <div className="max-w-md w-full bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-700">
         <div className="flex justify-between items-center mb-6">
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-gray-400">
             {currentQuestion + 1} / {questions.length}
           </span>
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-gray-400">
             점수: {score}
           </span>
         </div>
 
         <div className="text-center mb-8">
-          <div className="text-sm text-blue-600 mb-2">
+          <div className="text-sm text-blue-400 mb-2">
             {PART_OF_SPEECH_KOREAN[question.word.part_of_speech]}
           </div>
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+          <h2 className="text-3xl font-bold text-white mb-4">
             {question.word.english}
           </h2>
-          <p className="text-gray-600">위 단어의 뜻을 고르세요</p>
+          <p className="text-gray-300">위 단어의 뜻을 고르세요</p>
         </div>
 
         <div className="space-y-3 mb-6">
@@ -195,8 +195,8 @@ export default function Quiz() {
               onClick={() => handleAnswerSelect(option)}
               className={`w-full py-4 px-6 rounded-xl font-medium transition-colors ${
                 selectedAnswer === option
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-700 text-gray-200 hover:bg-gray-600 border border-gray-600'
               }`}
             >
               {option}
@@ -209,8 +209,8 @@ export default function Quiz() {
           disabled={!selectedAnswer}
           className={`w-full py-3 px-6 rounded-xl font-semibold transition-colors ${
             selectedAnswer
-              ? 'bg-green-500 text-white hover:bg-green-600'
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              ? 'bg-green-600 text-white hover:bg-green-700'
+              : 'bg-gray-600 text-gray-400 cursor-not-allowed'
           }`}
         >
           {currentQuestion + 1 === questions.length ? '결과 보기' : '다음 문제'}
