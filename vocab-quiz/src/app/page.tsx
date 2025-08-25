@@ -4,9 +4,9 @@ import Link from 'next/link'
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col items-center justify-center p-4">
+    <div className="min-h-[calc(100vh-80px)] bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col items-center justify-center p-4">
       <div className="max-w-md w-full bg-gray-800 rounded-2xl shadow-xl p-8 text-center border border-gray-700">
-        <h1 className="text-3xl font-bold text-white mb-2">영단어 퀴즈</h1>
+        <h1 className="text-3xl font-bold text-white mb-2">강직 영단어</h1>
         <p className="text-gray-300 mb-8">품사별로 영단어를 학습해보세요</p>
         
         <div className="space-y-4">

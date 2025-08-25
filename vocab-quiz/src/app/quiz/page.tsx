@@ -225,7 +225,7 @@ function QuizContent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+      <div className="min-h-[calc(100vh-80px)] bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
         <div className="text-xl text-white">로딩 중...</div>
       </div>
     )
@@ -235,7 +235,7 @@ function QuizContent() {
     const percentage = Math.round((score / questions.length) * 100)
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col items-center justify-center p-4">
+      <div className="min-h-[calc(100vh-80px)] bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col items-center justify-center p-4">
         <div className="max-w-md w-full bg-gray-800 rounded-2xl shadow-xl p-8 text-center border border-gray-700">
           <h2 className="text-2xl font-bold text-white mb-4">퀴즈 완료!</h2>
           <div className="text-6xl font-bold text-blue-400 mb-2">{percentage}%</div>
@@ -263,7 +263,7 @@ function QuizContent() {
 
   if (questions.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+      <div className="min-h-[calc(100vh-80px)] bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
         <div className="text-xl text-white">문제를 불러올 수 없습니다.</div>
       </div>
     )
@@ -272,7 +272,7 @@ function QuizContent() {
   const question = questions[currentQuestion]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col items-center justify-center p-4">
+    <div className="min-h-[calc(100vh-80px)] bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col items-center justify-center p-4">
       <div className="max-w-md w-full bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-700">
         <div className="flex justify-between items-center mb-6">
           <span className="text-sm text-gray-400">
@@ -328,7 +328,7 @@ function QuizContent() {
 export default function Quiz() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+      <div className="min-h-[calc(100vh-80px)] bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
         <div className="text-xl text-white">로딩 중...</div>
       </div>
     }>
