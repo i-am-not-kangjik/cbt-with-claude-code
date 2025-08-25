@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { Word, QuizQuestion } from '@/types/quiz'
@@ -16,7 +16,7 @@ const PART_OF_SPEECH_KOREAN: Record<string, string> = {
   interjection: '감탄사'
 }
 
-export default function PracticeQuiz() {
+function PracticeQuizContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const wordIds = searchParams.get('words')?.split(',') || []
@@ -354,5 +354,17 @@ export default function PracticeQuiz() {
         </button>
       </div>
     </div>
+  )
+}
+
+export default function PracticeQuiz() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+        <div className="text-xl text-white">로딩 중...</div>
+      </div>
+    }>
+      <PracticeQuizContent />
+    </Suspense>
   )
 }
