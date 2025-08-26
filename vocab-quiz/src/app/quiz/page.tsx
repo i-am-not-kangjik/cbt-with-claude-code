@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { Word, QuizQuestion } from '@/types/quiz'
+import Spinner from '@/components/ui/spinner'
 
 const PART_OF_SPEECH_KOREAN: Record<string, string> = {
   noun: '명사',
@@ -29,6 +30,7 @@ function QuizContent() {
   const [isLoading, setIsLoading] = useState(true)
   const [userAnswers, setUserAnswers] = useState<Array<{word: Word, userAnswer: string, isCorrect: boolean}>>([])
   const [, setQuizResultId] = useState<string>('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const loadQuestions = async () => {
     try {
@@ -93,6 +95,8 @@ function QuizContent() {
   }
 
   const handleNextQuestion = async () => {
+    if (isSubmitting) return
+    
     const isCorrect = selectedAnswer === questions[currentQuestion].correctAnswer
     const newScore = isCorrect ? score + 1 : score
     
@@ -110,9 +114,11 @@ function QuizContent() {
       setCurrentQuestion(currentQuestion + 1)
       setSelectedAnswer('')
     } else {
+      setIsSubmitting(true)
       const resultId = await saveQuizResult(newScore, [...userAnswers, answerRecord])
       setQuizResultId(resultId)
       setShowResult(true)
+      setIsSubmitting(false)
     }
   }
 
@@ -313,14 +319,20 @@ function QuizContent() {
 
         <button
           onClick={handleNextQuestion}
-          disabled={!selectedAnswer}
-          className={`w-full py-3 px-6 rounded-xl font-semibold transition-colors ${
-            selectedAnswer
+          disabled={!selectedAnswer || isSubmitting}
+          className={`w-full py-3 px-6 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 ${
+            selectedAnswer && !isSubmitting
               ? 'bg-green-600 text-white hover:bg-green-700'
               : 'bg-gray-600 text-gray-400 cursor-not-allowed'
           }`}
         >
-          {currentQuestion + 1 === questions.length ? '결과 보기' : '다음 문제'}
+          {isSubmitting && currentQuestion + 1 === questions.length && (
+            <Spinner size="small" className="text-white" />
+          )}
+          {currentQuestion + 1 === questions.length ? 
+            (isSubmitting ? '결과 저장 중...' : '결과 보기') : 
+            '다음 문제'
+          }
         </button>
       </div>
     </div>
